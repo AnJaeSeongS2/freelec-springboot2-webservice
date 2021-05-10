@@ -3,7 +3,7 @@ package org.sonan.book.springboot.web.dto;
 import junit.framework.TestCase;
 import org.junit.Test;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created by Jaeseong on 2021/05/10
