@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,5 +54,30 @@ public class PostRepositoryTest extends TestCase {
         assertThat(post.getTitle()).isEqualTo(title);
         assertThat(post.getContent()).isEqualTo(content);
         assertThat(post.getAuthor()).isEqualTo(author);
+    }
+
+    @Test
+    public void BaseTimeEntity_등록() throws Exception {
+        //given
+        LocalDateTime prevSaveTime = LocalDateTime.now();
+        System.out.println(">>>>>>>  prevSaveTime=" + prevSaveTime);
+        postRepo.save(Post.builder()
+                .title("title")
+                .content("content")
+                .author("author")
+                .build());
+        //when
+        List<Post> all = postRepo.findAll();
+
+        //then
+        Post post = all.get(0);
+        Thread.sleep(2000);
+        post.update("title2", "content2");
+
+
+        // create, update가 한번에 commit되므로 값이 같다.
+        System.out.println(">>>>>>>  createdDate=" + post.getCreatedDate() + ", modifiedDate=" + post.getModifiedDate());
+        assertThat(post.getCreatedDate()).isAfterOrEqualTo(prevSaveTime);
+        assertThat(post.getModifiedDate()).isAfterOrEqualTo(prevSaveTime);
     }
 }
